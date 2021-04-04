@@ -37,10 +37,9 @@ COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache /wheels/*
-
 # copy entrypoint-prod.sh
 COPY ./entrypoint.sh $APP_HOME
-
+RUN chmod +x entrypoint.sh
 # copy project
 COPY . $APP_HOME
 
@@ -49,6 +48,8 @@ RUN chown -R microblog: $HOME
 
 # change to the app user
 USER microblog
+
+EXPOSE 5000
 
 # run entrypoint.prod.sh
 ENTRYPOINT ["./entrypoint.sh"]
